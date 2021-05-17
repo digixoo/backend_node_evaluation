@@ -1,6 +1,7 @@
 const express = require('express');
+const product = require('../Entity/product');
 const response = require('../../network/response');
-
+const db = require('../../model/product');
 
 function listar(req, res){     
     response.success(req, res, 'La lista de productos es: 1,2,3,4,5,6')
@@ -16,12 +17,22 @@ function listar(req, res){
 
   function obtenerId(req, res){     
     response.success(req, res, `El id entregado es ${req.params.id}`);
-
   };
 
   function insertar(req, res){
-      console.log(req.body);
-      response.success(req, res, 'insertado');
+    console.log(req.body);
+
+    let entity = product.validate(req.body);
+
+    if(entity.isValid == true)
+    {        
+        db.guardar(req.body);
+        response.success(req, res, 'insertado');
+    }
+    else
+    {
+        response.error(req, res, 'ocurrio un error', 500, entity.body);
+    }
   }
 
   function actualizar(req, res){
