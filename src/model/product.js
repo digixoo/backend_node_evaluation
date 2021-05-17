@@ -54,10 +54,31 @@ function guardar(entity){
     return product;
   }
   
+  async function actualizar(id, entity){  
+    const Model = mongoose.model(collection, schema.Product);
+
+    console.log(entity)
+    if (mongoose.isValidObjectId(id)){
+      const res = await Model.updateOne({ _id: id }, entity);
+      console.log(`n: ${res.n}`);
+      console.log(`nM: ${res.nModified}`)
+      if (res.nModified === 1){           
+        console.log("modificado")
+        return true;          
+      }
+      else
+      {
+          console.log("no modificado")
+          return false;
+      }
+          
+    }
+  } 
 
 
 module.exports = {
     guardar,
     listar,
-    obtener
+    obtener,
+    actualizar
 };

@@ -20,8 +20,6 @@ async function listar(req, res){
   async function obtenerId(req, res){     
     let id = req.params.id;
 
-    console.log(id)
-
     let datos = await db.obtener(id);
 
     response.success(req, res, datos);
@@ -35,17 +33,33 @@ async function listar(req, res){
     if(entity.isValid == true)
     {        
         db.guardar(req.body);
-        response.success(req, res, 'insertado');
+        response.success(req, res, 'Producto ingresado', 201);
     }
     else
     {
-        response.error(req, res, 'ocurrio un error', 500, entity.body);
+        response.error(req, res, 'ocurrio un error', entity.body, 500);
     }
   }
 
-  function actualizar(req, res){
-      console.log(req.body);
-      response.success(req, res, 'actualizado');
+  async function actualizar(req, res){   
+    let id = req.params.id;
+    let entity = product.validate(req.body);
+
+    if(entity.isValid){
+      let result = await db.actualizar(id, req.body);
+      if(result){
+        response.success(req, res, 'Producto modificado', 201)
+      }
+      else{
+        response.success(req, res, 'Producto no encontrado', 200)
+      }
+    }
+    else{
+      response.error(req, res, 'Datos no cumplen con estructura correcta', 400);
+    }
+    
+
+   
   }
 
   function borrar(req, res){
