@@ -3,8 +3,10 @@ const product = require('../Entity/product');
 const response = require('../../network/response');
 const db = require('../../model/product');
 
-function listar(req, res){     
-    response.success(req, res, 'La lista de productos es: 1,2,3,4,5,6')
+async function listar(req, res){     
+    let datos = await db.listar()
+
+    response.success(req, res, datos)
     // if(req.query.error == 'ok')
     // {        
     //     response.error(req, res, 'Prueba de error', 403, 'Error Simulado');
@@ -15,8 +17,14 @@ function listar(req, res){
   };
 
 
-  function obtenerId(req, res){     
-    response.success(req, res, `El id entregado es ${req.params.id}`);
+  async function obtenerId(req, res){     
+    let id = req.params.id;
+
+    console.log(id)
+
+    let datos = await db.obtener(id);
+
+    response.success(req, res, datos);
   };
 
   function insertar(req, res){

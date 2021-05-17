@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 
 dotenv.config()
 
-
-
 mongoose.connect(`${process.env.MONGO_CONNECTION}://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`, {
                             useNewUrlParser: true, 
                             useUnifiedTopology: true, 
@@ -22,6 +20,13 @@ const Product = new mongoose.Schema({
     categoryId: String,
     image: String
   });
+ 
+Product.methods.speak = function () {
+  const alert = this.name
+    ? `Producto guardado ${this.name}`
+    : 'Producto no guardado: nombre no encontrado';
+  console.log(alert);
+}
 
 const Category = new mongoose.Schema({
     name: String,  
